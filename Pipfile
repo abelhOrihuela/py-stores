@@ -10,6 +10,8 @@ Flask = "*"
 Flask-JWT-Extended = "*"
 Flask-RESTful = "*"
 Flask-SQLAlchemy = "*"
+marshmallow = "*"
+flask-marshmallow = "*"
 
 [requires]
 python_version = "3.7"
