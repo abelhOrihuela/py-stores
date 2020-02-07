@@ -1,15 +1,18 @@
 from flask_restful import Resource
 from models.store import StoreModel
-
+from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
 
 class Store(Resource):
-    def get(self, name: str):
+
+    @classmethod
+    def get(cls, name: str):
         store = StoreModel.find_by_name(name)
         if store:
             return store.json()
-        return {"message": "Store not found."}, 404
+        return {"message": NOT_FOUND.format("Store")}, 404
 
-    def post(self, name: str):
+    @classmethod
+    def post(cls, name: str):
         if StoreModel.find_by_name(name):
             return (
                 {"message": "A store with name '{}' already exists.".format(name)},
@@ -20,11 +23,12 @@ class Store(Resource):
         try:
             store.save_to_db()
         except:
-            return {"message": "An error occurred while creating the store."}, 500
+            return {"message": ERROR_INSERTING.format("Stote")}, 500
 
         return store.json(), 201
 
-    def delete(self, name: str):
+    @classmethod
+    def delete(cls, name: str):
         store = StoreModel.find_by_name(name)
         if store:
             store.delete_from_db()
@@ -33,5 +37,7 @@ class Store(Resource):
 
 
 class StoreList(Resource):
-    def get(self):
+
+    @classmethod
+    def get(cls):
         return {"stores": [x.json() for x in StoreModel.find_all()]}

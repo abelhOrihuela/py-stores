@@ -10,13 +10,14 @@ from flask_jwt_extended import (
 )
 from models.user import UserModel
 from blacklist import BLACKLIST
+from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument(
-    "username", type=str, required=True, help="This field cannot be blank."
+    "username", type=str, required=True, help=ERROR_BLANK_FIELD.format("username")
 )
 _user_parser.add_argument(
-    "password", type=str, required=True, help="This field cannot be blank."
+    "password", type=str, required=True, help=ERROR_BLANK_FIELD.format("password")
 )
 
 

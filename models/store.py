@@ -1,9 +1,7 @@
 from typing import Dict, List, Union
 from db import db
-from models.item import ItemJSON
-
-StoreJSON = Dict[str, Union[int, str, List[ItemJSON]]]
-
+from serializers.item import ItemJSON
+from serializers.store import StoreJSON
 
 class StoreModel(db.Model):
     # table of SQL
@@ -17,8 +15,6 @@ class StoreModel(db.Model):
     def __init__(self, name: str):
         self.name = name
 
-    # formatter to JSON
-    # return sctructure StoreJSON
     def json(self) -> StoreJSON:
         return {
             "id": self.id,
