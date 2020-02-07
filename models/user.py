@@ -1,7 +1,7 @@
 from typing import Dict, Union
 from db import db
+from serializers.user import UserJSON
 
-userJSON = Dict[str, Union[int, str]]
 
 class UserModel(db.Model):
     __tablename__ = "users"
@@ -14,7 +14,7 @@ class UserModel(db.Model):
         self.username = username
         self.password = password
 
-    def json(self) -> userJSON:
+    def json(self) -> UserJSON:
         return {"id": self.id, "username": self.username}
 
     @classmethod

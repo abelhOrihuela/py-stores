@@ -2,19 +2,23 @@ from typing import Dict, List, Union
 from db import db
 from models.item import ItemJSON
 
-StoreJSON = Dict[str, Union[ int, str, List[ItemJSON]]]
+StoreJSON = Dict[str, Union[int, str, List[ItemJSON]]]
+
 
 class StoreModel(db.Model):
+    # table of SQL
     __tablename__ = "stores"
 
+    # Strucuture of table
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
-
     items = db.relationship("ItemModel", lazy="dynamic")
 
     def __init__(self, name: str):
         self.name = name
 
+    # formatter to JSON
+    # return sctructure StoreJSON
     def json(self) -> StoreJSON:
         return {
             "id": self.id,
