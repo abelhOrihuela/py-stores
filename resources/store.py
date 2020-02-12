@@ -1,6 +1,11 @@
 from flask_restful import Resource
 from models.store import StoreModel
+from schemas.store import StoreSchema
+
 from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
+
+store_schema = StoreSchema()
+stores_list_schema = StoreSchema(many=True)
 
 class Store(Resource):
 
@@ -8,7 +13,7 @@ class Store(Resource):
     def get(cls, name: str):
         store = StoreModel.find_by_name(name)
         if store:
-            return store.json()
+            return store_schema.dump(store)
         return {"message": NOT_FOUND.format("Store")}, 404
 
     @classmethod
@@ -19,13 +24,13 @@ class Store(Resource):
                 400,
             )
 
-        store = StoreModel(name)
+        store = StoreModel(name=name)
         try:
             store.save_to_db()
         except:
             return {"message": ERROR_INSERTING.format("Stote")}, 500
 
-        return store.json(), 201
+        return store_schema.dump(store), 201
 
     @classmethod
     def delete(cls, name: str):
@@ -40,4 +45,4 @@ class StoreList(Resource):
 
     @classmethod
     def get(cls):
-        return {"stores": [x.json() for x in StoreModel.find_all()]}
+        return {"stores": stores_list_schema.dump(StoreModel.find_all())}
