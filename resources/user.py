@@ -18,12 +18,9 @@ from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
 user_schema = UserSchema()
 
 class UserRegister(Resource):
-    def post(self):
-
-        try:
-            data = user_schema.load(request.get_json())
-        except ValidationError as error:
-            return error.messages, 400
+    @classmethod
+    def post(cls):
+        data = user_schema.load(request.get_json())
 
         if UserModel.find_by_username(data.username):
             return {"message": "A user with that username already exists."}, 400
@@ -52,10 +49,7 @@ class User(Resource):
 
 class UserLogin(Resource):
     def post(self):
-        try:
-            user_data = user_schema.load(request.get_json())
-        except ValidationError as error:
-            return error.messages, 400
+        user_data = user_schema.load(request.get_json())
 
         user = UserModel.find_by_username(user_data.username)
 
