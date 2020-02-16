@@ -1,6 +1,7 @@
 from typing import Dict, Union
 from db import db
 
+
 class UserModel(db.Model):
     __tablename__ = "users"
 

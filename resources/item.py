@@ -12,6 +12,7 @@ from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
 item_schema = ItemSchema()
 items_list_schema = ItemSchema(many=True)
 
+
 class Item(Resource):
     @classmethod
     def get(cls, name: str):
@@ -75,7 +76,6 @@ class Item(Resource):
 
 
 class ItemList(Resource):
-
     @classmethod
     def get(cls):
-        return { "items": items_list_schema.dump(ItemModel.find_all()) }, 200
+        return {"items": items_list_schema.dump(ItemModel.find_all())}, 200

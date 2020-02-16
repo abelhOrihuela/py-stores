@@ -7,8 +7,8 @@ from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
 store_schema = StoreSchema()
 stores_list_schema = StoreSchema(many=True)
 
-class Store(Resource):
 
+class Store(Resource):
     @classmethod
     def get(cls, name: str):
         store = StoreModel.find_by_name(name)
@@ -42,7 +42,6 @@ class Store(Resource):
 
 
 class StoreList(Resource):
-
     @classmethod
     def get(cls):
         return {"stores": stores_list_schema.dump(StoreModel.find_all())}

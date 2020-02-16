@@ -17,6 +17,7 @@ from utils.messages import ERROR_BLANK_FIELD, NOT_FOUND, ERROR_INSERTING
 
 user_schema = UserSchema()
 
+
 class UserRegister(Resource):
     @classmethod
     def post(cls):

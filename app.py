@@ -22,13 +22,16 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
 app.secret_key = "ABELORIHUELA"  # could do app.config['JWT_SECRET_KEY'] if we prefer
 api = Api(app)
 
+
 @app.before_first_request
 def create_tables():
     db.create_all()
 
+
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(error):
     return jsonify(error.messages), 400
+
 
 # This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled
 @jwt.token_in_blacklist_loader
@@ -36,6 +39,7 @@ def check_if_token_in_blacklist(decrypted_token):
     return (
         decrypted_token["jti"] in BLACKLIST
     )  # Here we blacklist particular JWTs that have been created in the past.
+
 
 jwt = JWTManager(app)
 
