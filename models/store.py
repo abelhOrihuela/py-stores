@@ -1,6 +1,7 @@
 from typing import List
 from db import db
 
+
 class StoreModel(db.Model):
     # table of SQL
     __tablename__ = "stores"
