@@ -8,9 +8,12 @@ from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogo
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from marshmallow import ValidationError
+from flask_migrate import Migrate
+
+DB_URL = "postgresql+psycopg2://localhost:5432/test"
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 app.config["JWT_BLACKLIST_ENABLED"] = True  # enable blacklist feature
@@ -21,17 +24,16 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
 
 app.secret_key = "ABELORIHUELA"  # could do app.config['JWT_SECRET_KEY'] if we prefer
 api = Api(app)
-
+jwt = JWTManager(app)
+migrate = Migrate(app, db)
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
-
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(error):
     return jsonify(error.messages), 400
-
 
 # This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled
 @jwt.token_in_blacklist_loader
@@ -40,8 +42,6 @@ def check_if_token_in_blacklist(decrypted_token):
         decrypted_token["jti"] in BLACKLIST
     )  # Here we blacklist particular JWTs that have been created in the past.
 
-
-jwt = JWTManager(app)
 
 api.add_resource(Store, "/store/<string:name>")
 api.add_resource(StoreList, "/stores")
@@ -58,3 +58,22 @@ if __name__ == "__main__":
     db.init_app(app)
     ma.init_app(app)
     app.run(port=5000, debug=True)
+
+
+
+# @app.cli.command('resetdb')
+# def resetdb_command():
+#     """Destroys and creates the database + tables."""
+#     db.init_app(app)
+
+#     from sqlalchemy_utils import database_exists, create_database, drop_database
+#     if database_exists(DB_URL):
+#         print('Deleting database.')
+#         drop_database(DB_URL)
+#     if not database_exists(DB_URL):
+#         print('Creating database.')
+#         create_database(DB_URL)
+
+#     print('Creating tables.')
+#     db.create_all()
+#     print('Shiny!')

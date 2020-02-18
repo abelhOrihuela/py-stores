@@ -12,6 +12,11 @@ Flask-RESTful = "*"
 Flask-SQLAlchemy = "*"
 marshmallow = "*"
 flask-marshmallow = "*"
+requests = "*"
+psycopg2 = "*"
+psycopg2-binary = "*"
+flask-migrate = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.7"

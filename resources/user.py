@@ -21,9 +21,9 @@ user_schema = UserSchema()
 class UserRegister(Resource):
     @classmethod
     def post(cls):
-        data = user_schema.load(request.get_json())
+        user = user_schema.load(request.get_json())
 
-        if UserModel.find_by_username(data.username):
+        if UserModel.find_by_username(user.username):
             return {"message": "A user with that username already exists."}, 400
 
         user.save_to_db()

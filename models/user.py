@@ -18,7 +18,8 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     def send_email_confirmation(self) -> Response:
-        // call method to send emails
+        #call method to send emails
+        print("Hola")
 
     def save_to_db(self) -> None:
         db.session.add(self)
