@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
-from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogout
+from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogout, UserConfirm
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from marshmallow import ValidationError
@@ -50,6 +50,7 @@ api.add_resource(ItemList, "/items")
 api.add_resource(UserRegister, "/register")
 api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")
+api.add_resource(UserConfirm, "/user-confirm/<int:user_id>")
 api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(UserLogout, "/logout")
 

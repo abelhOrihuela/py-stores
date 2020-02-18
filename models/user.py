@@ -1,6 +1,5 @@
-from typing import Dict, Union
 from db import db
-
+from requests import Response
 
 class UserModel(db.Model):
     __tablename__ = "users"
@@ -8,6 +7,7 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    activated = db.Column(db.Boolean, default=False)
 
     @classmethod
     def find_by_username(cls, username: str) -> "UserModel":
@@ -16,6 +16,9 @@ class UserModel(db.Model):
     @classmethod
     def find_by_id(cls, _id: int) -> "UserModel":
         return cls.query.filter_by(id=_id).first()
+
+    def send_email_confirmation(self) -> Response:
+        // call method to send emails
 
     def save_to_db(self) -> None:
         db.session.add(self)
