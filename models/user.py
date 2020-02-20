@@ -1,10 +1,14 @@
 from db import db
 from requests import Response
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import text as sa_text
+import uuid
 
 class UserModel(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(80), nullable=False, default=str(uuid.uuid4()))
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     activated = db.Column(db.Boolean, default=False)
