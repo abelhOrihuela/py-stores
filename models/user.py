@@ -1,7 +1,7 @@
 from db import db
 from requests import Response
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import text as sa_text
+from models.organization import OrganizationModel
+from models.users_organizations import users_organizations
 import uuid
 
 class UserModel(db.Model):
@@ -12,13 +12,18 @@ class UserModel(db.Model):
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     activated = db.Column(db.Boolean, default=False)
+    organizations = db.relationship(
+        "OrganizationModel",
+        secondary=users_organizations,
+        back_populates="users"
+    )
 
     @classmethod
-    def find_by_username(cls, username: str) -> "UserModel":
+    def find_by_username(cls, username: str) -> "User":
         return cls.query.filter_by(username=username).first()
 
     @classmethod
-    def find_by_id(cls, _id: int) -> "UserModel":
+    def find_by_id(cls, _id: int) -> "User":
         return cls.query.filter_by(id=_id).first()
 
     def send_email_confirmation(self) -> Response:

@@ -5,8 +5,6 @@ from ma import ma
 from db import db
 from blacklist import BLACKLIST
 from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogout, UserConfirm
-from resources.item import Item, ItemList
-from resources.store import Store, StoreList
 from marshmallow import ValidationError
 from flask_migrate import Migrate
 
@@ -23,7 +21,7 @@ app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
 ]  # allow blacklisting for access and refresh tokens
 
 app.secret_key = "ABELORIHUELA"  # could do app.config['JWT_SECRET_KEY'] if we prefer
-api = Api(app)
+api = Api(app, prefix="/api")
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
@@ -43,10 +41,6 @@ def check_if_token_in_blacklist(decrypted_token):
     )  # Here we blacklist particular JWTs that have been created in the past.
 
 
-api.add_resource(Store, "/store/<string:name>")
-api.add_resource(StoreList, "/stores")
-api.add_resource(Item, "/item/<string:name>")
-api.add_resource(ItemList, "/items")
 api.add_resource(UserRegister, "/register")
 api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(UserLogin, "/login")
