@@ -4,10 +4,9 @@ from flask_jwt_extended import JWTManager
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
-from resources.user import (
-    UserRegister,
+from resources.users import UserRegister, User
+from resources.login import (
     UserLogin,
-    User,
     UserMe,
     TokenRefresh,
     UserLogout,
