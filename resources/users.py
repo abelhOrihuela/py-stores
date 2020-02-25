@@ -50,3 +50,15 @@ class User(Resource):
             return {"message": "User not found."}, 404
         user.delete_from_db()
         return {"message": "User deleted."}, 200
+
+class UserConfirm(Resource):
+    @classmethod
+    def get(cls, user_id: int):
+        user = UserModel.find_by_id(user_id)
+
+        if not user:
+            return {"message": "User not found"}, 404
+
+        user.activated = True
+        user.save_to_db()
+        return {"message": "User confirmed"}, 200

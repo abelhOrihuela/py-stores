@@ -4,13 +4,12 @@ from flask_jwt_extended import JWTManager
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
-from resources.users import UserRegister, User
+from resources.users import UserRegister, User, UserConfirm
 from resources.login import (
     UserLogin,
     UserMe,
     TokenRefresh,
-    UserLogout,
-    UserConfirm,
+    UserLogout
 )
 from resources.organizations import Organizations, Organization, OrganizationUsers
 from marshmallow import ValidationError

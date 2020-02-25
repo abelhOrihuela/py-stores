@@ -10,7 +10,6 @@ from flask_jwt_extended import (
     get_raw_jwt,
     get_current_user,
 )
-from marshmallow import ValidationError
 from models.user import UserModel
 from schemas.user import UserSchema
 from blacklist import BLACKLIST
@@ -67,15 +66,3 @@ class TokenRefresh(Resource):
         new_token = create_access_token(identity=current_user, fresh=False)
         return {"access_token": new_token}, 200
 
-
-class UserConfirm(Resource):
-    @classmethod
-    def get(cls, user_id: int):
-        user = UserModel.find_by_id(user_id)
-
-        if not user:
-            return {"message": "User not found"}, 404
-
-        user.activated = True
-        user.save_to_db()
-        return {"message": "User confirmed"}, 200
