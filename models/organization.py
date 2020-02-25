@@ -3,6 +3,7 @@ from typing import List
 from models.users_organizations import users_organizations
 from generate_uuid import generate_uuid
 
+
 class OrganizationModel(db.Model):
 
     __tablename__ = "organizations"
@@ -11,9 +12,7 @@ class OrganizationModel(db.Model):
     uuid = db.Column(db.String(80), nullable=False, unique=True, default=generate_uuid)
     name = db.Column(db.String(50), unique=True)
     users = db.relationship(
-        "UserModel",
-        secondary=users_organizations,
-        back_populates="organizations"
+        "UserModel", secondary=users_organizations, back_populates="organizations"
     )
 
     @classmethod

@@ -4,18 +4,19 @@ from models.organization import OrganizationModel
 from models.users_organizations import users_organizations
 import uuid
 
+
 class UserModel(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(80), nullable=False, unique=True, default=str(uuid.uuid4()))
+    uuid = db.Column(
+        db.String(80), nullable=False, unique=True, default=str(uuid.uuid4())
+    )
     username = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(500), nullable=False)
     activated = db.Column(db.Boolean, default=False)
     organizations = db.relationship(
-        "OrganizationModel",
-        secondary=users_organizations,
-        back_populates="users"
+        "OrganizationModel", secondary=users_organizations, back_populates="users"
     )
 
     @classmethod
@@ -31,7 +32,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(uuid=_uuid).first()
 
     def send_email_confirmation(self) -> Response:
-        #call method to send emails
+        # call method to send emails
         print("Hola")
 
     def save_to_db(self) -> None:

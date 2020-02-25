@@ -2,6 +2,7 @@ from ma import ma
 from models.user import UserModel
 from schemas.organization import OrganizationSchema
 
+
 class UserSchema(ma.ModelSchema):
 
     organizations = ma.Nested("OrganizationSchema", many=True)

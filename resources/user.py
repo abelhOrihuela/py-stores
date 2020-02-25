@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request
-from werkzeug.security import safe_str_cmp
+from werkzeug.security import safe_str_cmp, generate_password_hash, check_password_hash
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -8,6 +8,7 @@ from flask_jwt_extended import (
     get_jwt_identity,
     jwt_required,
     get_raw_jwt,
+    get_current_user,
 )
 from marshmallow import ValidationError
 from models.user import UserModel
@@ -25,6 +26,8 @@ class UserRegister(Resource):
 
         if UserModel.find_by_username(user.username):
             return {"message": "A user with that username already exists."}, 400
+
+        user.password = generate_password_hash(user.password)
 
         user.save_to_db()
         user.send_email_confirmation()
@@ -50,19 +53,24 @@ class User(Resource):
 
 
 class UserLogin(Resource):
-    def post(self):
+    @classmethod
+    def post(cls):
         user_data = user_schema.load(request.get_json())
 
         user = UserModel.find_by_username(user_data.username)
-
         # this is what the `authenticate()` function did in security.py
-        if user and safe_str_cmp(user.password, user_data.password):
+        # if user and safe_str_cmp(user.password, user_data.password):
+
+        if check_password_hash(user.password, user_data.password):
             if user.activated:
                 access_token = create_access_token(identity=user.id, fresh=True)
                 refresh_token = create_refresh_token(user.id)
-                return {"access_token": access_token, "refresh_token": refresh_token}, 200
+                return (
+                    {"access_token": access_token, "refresh_token": refresh_token},
+                    200,
+                )
             return {"message": "User {} not confirmed".format(user.username)}
-        
+
         return {"message": "Invalid credentials!"}, 401
 
 
@@ -82,8 +90,8 @@ class TokenRefresh(Resource):
         new_token = create_access_token(identity=current_user, fresh=False)
         return {"access_token": new_token}, 200
 
+
 class UserConfirm(Resource):
-    
     @classmethod
     def get(cls, user_id: int):
         user = UserModel.find_by_id(user_id)
@@ -94,3 +102,13 @@ class UserConfirm(Resource):
         user.activated = True
         user.save_to_db()
         return {"message": "User confirmed"}, 200
+
+
+class UserMe(Resource):
+    @classmethod
+    @jwt_required
+    def get(cls):
+        user_id = get_jwt_identity()
+        user = UserModel.find_by_id(user_id)
+
+        return user_schema.dump(user), 200
