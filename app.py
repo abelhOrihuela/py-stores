@@ -5,6 +5,7 @@ from ma import ma
 from db import db
 from blacklist import BLACKLIST
 from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogout, UserConfirm
+from resources.organizations import Organizations, Organization, OrganizationUsers
 from marshmallow import ValidationError
 from flask_migrate import Migrate
 
@@ -41,12 +42,16 @@ def check_if_token_in_blacklist(decrypted_token):
     )  # Here we blacklist particular JWTs that have been created in the past.
 
 
+api.add_resource(Organizations, "/organizations")
+api.add_resource(Organization, "/organizations/<string:uuid>")
+api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:user>")
+
 api.add_resource(UserRegister, "/register")
-api.add_resource(User, "/user/<int:user_id>")
-api.add_resource(UserLogin, "/login")
 api.add_resource(UserConfirm, "/user-confirm/<int:user_id>")
+api.add_resource(UserLogin, "/login")
 api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(UserLogout, "/logout")
+
 
 if __name__ == "__main__":
     db.init_app(app)

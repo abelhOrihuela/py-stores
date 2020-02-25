@@ -1,14 +1,14 @@
 from db import db
 from typing import List
 from models.users_organizations import users_organizations
-import uuid
+from generate_uuid import generate_uuid
 
 class OrganizationModel(db.Model):
 
     __tablename__ = "organizations"
 
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(80), nullable=False, default=str(uuid.uuid4()))
+    uuid = db.Column(db.String(80), nullable=False, unique=True, default=generate_uuid)
     name = db.Column(db.String(50), unique=True)
     users = db.relationship(
         "UserModel",
@@ -17,7 +17,15 @@ class OrganizationModel(db.Model):
     )
 
     @classmethod
-    def find_by_uuid(cls, _uuid: str) -> "Organization":
+    def find_by_name(cls, _name: str) -> "OrganizationModel":
+        return cls.query.filter_by(name=_name).first()
+
+    @classmethod
+    def find_all(cls) -> List["OrganizationModel"]:
+        return cls.query.all()
+
+    @classmethod
+    def find_by_uuid(cls, _uuid: str) -> "OrganizationModel":
         return cls.query.filter_by(uuid=_uuid).first()
 
     def save_to_db(self) -> None:
