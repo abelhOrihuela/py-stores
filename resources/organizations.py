@@ -11,14 +11,14 @@ organization_list_schema = OrganizationSchema(many=True)
 class Organizations(Resource):
     # return all
     @classmethod
-    def get(csl):
+    def get(cls):
         return {
             "organizations": organization_list_schema.dump(OrganizationModel.find_all())
         }
 
     # create new
     @classmethod
-    def post(csl):
+    def post(cls):
         organization = organization_schema.load(request.get_json())
 
         if OrganizationModel.find_by_name(organization.name):
@@ -33,7 +33,7 @@ class Organization(Resource):
 
     # return by uuid
     @classmethod
-    def get(csl, uuid: str):
+    def get(cls, uuid: str):
         org = OrganizationModel.find_by_uuid(uuid)
 
         if not org:
@@ -43,22 +43,21 @@ class Organization(Resource):
 
     # update by uuid
     @classmethod
-    def put(csl, uuid: str):
+    def put(cls, uuid: str):
         org_request = organization_schema.load(request.get_json())
         org = OrganizationModel.find_by_uuid(uuid)
 
         if not org:
             return {"message": "Organization not found"}, 404
 
-        org.name = org_json["name"]
+        org.name = org_request.name
+        org_request.save_to_db()
 
-        org.save_to_db()
-
-        return organization_schema.dump(org), 200
+        return organization_schema.dump(org_request), 200
 
     # delete by uuid
     @classmethod
-    def delete(csl, uuid: str):
+    def delete(cls, uuid: str):
         return "Hola"
 
 

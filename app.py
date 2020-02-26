@@ -5,13 +5,9 @@ from ma import ma
 from db import db
 from blacklist import BLACKLIST
 from resources.users import UserRegister, User, UserConfirm
-from resources.login import (
-    UserLogin,
-    UserMe,
-    TokenRefresh,
-    UserLogout
-)
+from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
+from resources.projects import Project, Projects
 from marshmallow import ValidationError
 from flask_migrate import Migrate
 
@@ -54,6 +50,9 @@ def check_if_token_in_blacklist(decrypted_token):
 api.add_resource(Organizations, "/organizations")
 api.add_resource(Organization, "/organizations/<string:uuid>")
 api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:user>")
+
+api.add_resource(Projects, "/projects")
+api.add_resource(Project, "/projects/<string:uuid>")
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserConfirm, "/user-confirm/<int:user_id>")

@@ -51,6 +51,7 @@ class User(Resource):
         user.delete_from_db()
         return {"message": "User deleted."}, 200
 
+
 class UserConfirm(Resource):
     @classmethod
     def get(cls, user_id: int):

@@ -2,16 +2,14 @@ from db import db
 from requests import Response
 from models.organization import OrganizationModel
 from models.users_organizations import users_organizations
-import uuid
+from generate_uuid import generate_uuid
 
 
 class UserModel(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(
-        db.String(80), nullable=False, unique=True, default=str(uuid.uuid4())
-    )
+    uuid = db.Column(db.String(80), nullable=False, unique=True, default=generate_uuid)
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(500), nullable=False)
     activated = db.Column(db.Boolean, default=False)
