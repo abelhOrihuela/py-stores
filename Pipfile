@@ -20,6 +20,11 @@ sqlalchemy-utils = "*"
 marshmallow-sqlalchemy = "*"
 python-dotenv = "*"
 black = "*"
+beautifulsoup4 = "*"
+redis = "*"
+rq = "*"
+beatifulsoup4 = "*"
+elasticsearch = "*"
 
 [requires]
 python_version = "3.7"

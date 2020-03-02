@@ -8,8 +8,14 @@ from resources.users import UserRegister, User, UserConfirm
 from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
 from resources.projects import Project, Projects
+from resources.source import Source
+from resources.posts import Posts
 from marshmallow import ValidationError
 from flask_migrate import Migrate
+from elasticsearch import Elasticsearch
+
+
+es = Elasticsearch()
 
 DB_URL = "postgresql+psycopg2://localhost:5432/test"
 
@@ -53,6 +59,10 @@ api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:u
 
 api.add_resource(Projects, "/projects")
 api.add_resource(Project, "/projects/<string:uuid>")
+
+
+api.add_resource(Source, "/source")
+api.add_resource(Posts, "/posts")
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserConfirm, "/user-confirm/<int:user_id>")
