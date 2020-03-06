@@ -8,28 +8,16 @@ from resources.users import UserRegister, User, UserConfirm
 from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
 from resources.projects import Project, Projects
-from resources.source import Source
+from resources.sources import Source
+from resources.sources import Sources
 from resources.posts import Posts
 from marshmallow import ValidationError
 from flask_migrate import Migrate
-from elasticsearch import Elasticsearch
+from sa import create_app
 
+app = create_app()
+app.app_context().push()
 
-es = Elasticsearch()
-
-DB_URL = "postgresql+psycopg2://localhost:5432/test"
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["PROPAGATE_EXCEPTIONS"] = True
-app.config["JWT_BLACKLIST_ENABLED"] = True  # enable blacklist feature
-app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
-    "access",
-    "refresh",
-]  # allow blacklisting for access and refresh tokens
-
-app.secret_key = "ABELORIHUELA"  # could do app.config['JWT_SECRET_KEY'] if we prefer
 api = Api(app, prefix="/api")
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
@@ -61,7 +49,8 @@ api.add_resource(Projects, "/projects")
 api.add_resource(Project, "/projects/<string:uuid>")
 
 
-api.add_resource(Source, "/source")
+api.add_resource(Source, "/sources/<string:uuid>")
+api.add_resource(Sources, "/sources")
 api.add_resource(Posts, "/posts")
 
 api.add_resource(UserRegister, "/register")
@@ -73,6 +62,6 @@ api.add_resource(UserLogout, "/logout")
 
 
 if __name__ == "__main__":
-    db.init_app(app)
+    # db.init_app(app)
     ma.init_app(app)
     app.run(port=5000, debug=True)

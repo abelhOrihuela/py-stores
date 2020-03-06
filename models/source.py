@@ -9,11 +9,12 @@ class SourceModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(80), nullable=False, unique=True, default=generate_uuid)
     name = db.Column(db.String(80), nullable=False)
-    site = db.Column(db.String(200), nullable=False)
-    title_select = db.Column(db.String(500), nullable=False)
-    subtitle_select = db.Column(db.String(500), nullable=False)
-    body_select = db.Column(db.String(500))
-    tags_select = db.Column(db.String(500))
+    site = db.Column(db.String(500), nullable=False)
+    title_selector = db.Column(db.String(500), nullable=False)
+    subtitle_selector = db.Column(db.String(500))
+    tags_selector = db.Column(db.String(500))
+    content_selector = db.Column(db.String(500), nullable=False)
+    author_selector = db.Column(db.String(500))
 
     @classmethod
     def find_all(cls) -> List["SourceModel"]:

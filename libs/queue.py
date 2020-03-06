@@ -7,7 +7,6 @@ q = Queue(connection=r)
 
 
 class Queue:
-
     @classmethod
     def add_queue(cls, fn, args):
         job = q.enqueue(fn, args)
