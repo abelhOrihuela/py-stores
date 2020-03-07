@@ -8,8 +8,8 @@ from resources.users import UserRegister, User, UserConfirm
 from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
 from resources.projects import Project, Projects
-from resources.sources import Source
-from resources.sources import Sources
+from resources.sources import Source, Sources
+from resources.states import State, States
 from resources.posts import Posts
 from marshmallow import ValidationError
 from flask_migrate import Migrate
@@ -51,6 +51,10 @@ api.add_resource(Project, "/projects/<string:uuid>")
 
 api.add_resource(Source, "/sources/<string:uuid>")
 api.add_resource(Sources, "/sources")
+
+api.add_resource(State, "/states/<string:uuid>")
+api.add_resource(States, "/states")
+
 api.add_resource(Posts, "/posts")
 
 api.add_resource(UserRegister, "/register")
@@ -62,6 +66,6 @@ api.add_resource(UserLogout, "/logout")
 
 
 if __name__ == "__main__":
-    # db.init_app(app)
+    db.init_app(app)
     ma.init_app(app)
     app.run(port=5000, debug=True)
