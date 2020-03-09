@@ -1,7 +1,6 @@
 from db import db
 from typing import List
 from models.users_organizations import users_organizations
-from models.project import ProjectModel
 from generate_uuid import generate_uuid
 
 
@@ -15,8 +14,6 @@ class OrganizationModel(db.Model):
     users = db.relationship(
         "UserModel", secondary=users_organizations, back_populates="organizations"
     )
-
-    projects = db.relationship("ProjectModel", lazy="dynamic")
 
     @classmethod
     def find_by_name(cls, _name: str) -> "OrganizationModel":

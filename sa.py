@@ -20,5 +20,5 @@ def create_app():
         "ABELORIHUELA"  # could do app.config['JWT_SECRET_KEY'] if we prefer
     )
 
-    db.init_app(app)
+    # db.init_app(app)
     return app

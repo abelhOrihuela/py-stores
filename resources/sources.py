@@ -15,13 +15,13 @@ class Source(Resource):
         if not source:
             return {"message": "Source not found"}, 404
 
-        return source
+        return source_schema.dump(source)
 
     @classmethod
     def put(cls, uuid: str):
         source = SourceModel.find_by_uuid(uuid)
         source_json = request.get_json()
-        source_request = source_schema.load(source_json)
+        source_schema.load(source_json)
 
         if not source:
             return {"message": "Source not found"}, 404

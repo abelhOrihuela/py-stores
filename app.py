@@ -4,16 +4,18 @@ from flask_jwt_extended import JWTManager
 from ma import ma
 from db import db
 from blacklist import BLACKLIST
-from resources.users import UserRegister, User, UserConfirm
-from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
-from resources.organizations import Organizations, Organization, OrganizationUsers
-from resources.projects import Project, Projects
-from resources.sources import Source, Sources
-from resources.states import State, States
-from resources.posts import Posts
 from marshmallow import ValidationError
 from flask_migrate import Migrate
 from sa import create_app
+
+# Resources
+from resources.users import UserRegister, User, UserConfirm
+from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
+from resources.organizations import Organizations, Organization, OrganizationUsers
+from resources.sources import Source, Sources
+from resources.states import State, States
+from resources.posts import Posts
+
 
 app = create_app()
 app.app_context().push()
@@ -41,13 +43,14 @@ def check_if_token_in_blacklist(decrypted_token):
     )  # Here we blacklist particular JWTs that have been created in the past.
 
 
+# Routes
+
+# get list & create
 api.add_resource(Organizations, "/organizations")
+# get, update, delete by uuid
 api.add_resource(Organization, "/organizations/<string:uuid>")
+
 api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:user>")
-
-api.add_resource(Projects, "/projects")
-api.add_resource(Project, "/projects/<string:uuid>")
-
 
 api.add_resource(Source, "/sources/<string:uuid>")
 api.add_resource(Sources, "/sources")
