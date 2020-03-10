@@ -58,6 +58,8 @@ class PostModel:
                 "location": {"type": "Point", "coordinates": coordinates},
                 "content": content,
                 "tags": tagsText.upper(),
+                "author": author.text.replace("\n", ""),
+                "link": url,
                 "timestamp": datetime.now(),
             }
 

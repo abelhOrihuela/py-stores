@@ -14,6 +14,7 @@ from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
 from resources.sources import Source, Sources
 from resources.states import State, States
+from resources.municipalities import Municipalities, Municipality
 from resources.posts import Posts
 
 
@@ -55,8 +56,14 @@ api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:u
 api.add_resource(Source, "/sources/<string:uuid>")
 api.add_resource(Sources, "/sources")
 
+
+api.add_resource(Municipality, "/municipalities/<string:uuid>")
+api.add_resource(Municipalities, "/municipalities")
+
 api.add_resource(State, "/states/<string:uuid>")
 api.add_resource(States, "/states")
+
+
 
 api.add_resource(Posts, "/posts")
 

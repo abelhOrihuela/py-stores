@@ -1,7 +1,7 @@
 from db import db
 from typing import List
 from generate_uuid import generate_uuid
-
+from models.municipality import MunicipalityModel
 
 class StateModel(db.Model):
 
@@ -15,6 +15,7 @@ class StateModel(db.Model):
     updated_at = db.Column(
         db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
     )
+    municipalities = db.relationship('MunicipalityModel', lazy="dynamic")
 
     @classmethod
     def find_all(cls) -> List["StateModel"]:

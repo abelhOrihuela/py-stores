@@ -2,7 +2,9 @@ from flask_restful import Resource
 from models.state import StateModel
 from schemas.state import StateSchema
 from flask import request
-
+from flask_jwt_extended import (
+    jwt_required
+)
 state_schema = StateSchema()
 state_schema_list = StateSchema(many=True)
 
@@ -18,6 +20,7 @@ class State(Resource):
         return state_schema.dump(state), 200
 
     @classmethod
+    @jwt_required
     def put(cls, uuid: str):
         state = StateModel.find_by_uuid(uuid)
         state_json = request.get_json()
@@ -31,9 +34,10 @@ class State(Resource):
 
         state.save_to_db()
 
-        return {"Message": "State updated succesfully"}, 200
+        return {"Message": "State updated successfully"}, 200
 
     @classmethod
+    @jwt_required
     def delete(cls, uuid: str):
         state = StateModel.find_by_uuid(uuid)
 
@@ -52,7 +56,8 @@ class States(Resource):
         return {"states": state_schema_list.dump(StateModel.find_all())}
 
     @classmethod
+    @jwt_required
     def post(cls):
         state_request = state_schema.load(request.get_json())
         state_request.save_to_db()
-        return {"message": "State created succesfully"}, 201
+        return {"message": "State created successfully"}, 201
