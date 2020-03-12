@@ -1,5 +1,5 @@
 from db import db
-from generate_uuid import generate_uuid
+from lib.generate_uuid import generate_uuid
 from typing import List
 
 

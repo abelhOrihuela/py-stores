@@ -2,7 +2,7 @@ from db import db
 from requests import Response
 from models.organization import OrganizationModel
 from models.users_organizations import users_organizations
-from generate_uuid import generate_uuid
+from lib.generate_uuid import generate_uuid
 
 
 class UserModel(db.Model):

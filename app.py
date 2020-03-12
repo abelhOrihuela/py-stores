@@ -46,24 +46,18 @@ def check_if_token_in_blacklist(decrypted_token):
 
 # Routes
 
-# get list & create
 api.add_resource(Organizations, "/organizations")
-# get, update, delete by uuid
 api.add_resource(Organization, "/organizations/<string:uuid>")
-
 api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:user>")
 
 api.add_resource(Source, "/sources/<string:uuid>")
 api.add_resource(Sources, "/sources")
-
 
 api.add_resource(Municipality, "/municipalities/<string:uuid>")
 api.add_resource(Municipalities, "/municipalities")
 
 api.add_resource(State, "/states/<string:uuid>")
 api.add_resource(States, "/states")
-
-
 
 api.add_resource(Posts, "/posts")
 

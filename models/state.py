@@ -1,6 +1,6 @@
 from db import db
 from typing import List
-from generate_uuid import generate_uuid
+from lib.generate_uuid import generate_uuid
 from models.municipality import MunicipalityModel
 
 class StateModel(db.Model):

@@ -1,7 +1,7 @@
 from db import db
 from typing import List
 from models.users_organizations import users_organizations
-from generate_uuid import generate_uuid
+from lib.generate_uuid import generate_uuid
 
 
 class OrganizationModel(db.Model):
