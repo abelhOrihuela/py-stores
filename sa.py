@@ -5,7 +5,7 @@ DB_URL = "postgresql+psycopg2://localhost:5432/test"
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="emails")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -20,5 +20,5 @@ def create_app():
         "ABELORIHUELA"  # could do app.config['JWT_SECRET_KEY'] if we prefer
     )
 
-    # db.init_app(app)
+    db.init_app(app)
     return app

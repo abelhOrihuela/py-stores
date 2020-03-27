@@ -21,13 +21,21 @@ user_schema = UserSchema()
 class UserLogin(Resource):
     @classmethod
     def post(cls):
-        user_data = user_schema.load(request.get_json())
+        # user_data = user_schema.load(request.get_json())
 
-        user = UserModel.find_by_username(user_data.username)
+        json_request = request.get_json()
+
+        if not json_request["email"]:
+            return {"message": "Username is required"}, 404
+
+        user = UserModel.find_by_email(json_request["email"])
         # this is what the `authenticate()` function did in security.py
         # if user and safe_str_cmp(user.password, user_data.password):
 
-        if check_password_hash(user.password, user_data.password):
+        if not user:
+            return {"message": "User not found"}, 404
+
+        if check_password_hash(user.password, json_request["password"]):
             if user.activated:
                 access_token = create_access_token(identity=user.id, fresh=True)
                 refresh_token = create_refresh_token(user.id)
@@ -55,6 +63,9 @@ class UserMe(Resource):
     def get(cls):
         user_id = get_jwt_identity()
         user = UserModel.find_by_id(user_id)
+
+        if not user:
+            return {"message": "User not found"}, 404
 
         return user_schema.dump(user), 200
 

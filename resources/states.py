@@ -2,9 +2,8 @@ from flask_restful import Resource
 from models.state import StateModel
 from schemas.state import StateSchema
 from flask import request
-from flask_jwt_extended import (
-    jwt_required
-)
+from flask_jwt_extended import jwt_required
+
 state_schema = StateSchema()
 state_schema_list = StateSchema(many=True)
 

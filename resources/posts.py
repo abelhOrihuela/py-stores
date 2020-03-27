@@ -33,7 +33,7 @@ class Posts(Resource):
                                 "query": keyword,
                                 "fields": ["content", "title", "subtitle", "tags"],
                             }
-                        },
+                        }
                     ]
                 }
             }
@@ -41,4 +41,4 @@ class Posts(Resource):
 
         res = es.search(index="contents", body=body, filter_path=["hits.hits"])
 
-        return jsonify(res["hits"]["hits"]), 200
+        return res["hits"]["hits"], 200

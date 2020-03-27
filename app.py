@@ -7,9 +7,12 @@ from blacklist import BLACKLIST
 from marshmallow import ValidationError
 from flask_migrate import Migrate
 from sa import create_app
+from flask_cors import CORS
+from dotenv import load_dotenv
+
 
 # Resources
-from resources.users import UserRegister, User, UserConfirm
+from resources.users import UserRegister, User, UserConfirm, Users
 from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
 from resources.sources import Source, Sources
@@ -17,10 +20,10 @@ from resources.states import State, States
 from resources.municipalities import Municipalities, Municipality
 from resources.posts import Posts
 
-
+load_dotenv()
 app = create_app()
 app.app_context().push()
-
+CORS(app)
 api = Api(app, prefix="/api")
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
@@ -60,9 +63,11 @@ api.add_resource(State, "/states/<string:uuid>")
 api.add_resource(States, "/states")
 
 api.add_resource(Posts, "/posts")
+api.add_resource(User, "/users/<string:uuid>")
+api.add_resource(Users, "/users")
 
 api.add_resource(UserRegister, "/register")
-api.add_resource(UserConfirm, "/user-confirm/<int:user_id>")
+api.add_resource(UserConfirm, "/user-confirm/<string:uuid>")
 api.add_resource(UserLogin, "/login")
 api.add_resource(UserMe, "/me")
 api.add_resource(TokenRefresh, "/refresh")
@@ -70,6 +75,5 @@ api.add_resource(UserLogout, "/logout")
 
 
 if __name__ == "__main__":
-    db.init_app(app)
     ma.init_app(app)
     app.run(port=5000, debug=True)
