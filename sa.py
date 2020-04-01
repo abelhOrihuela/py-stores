@@ -1,5 +1,6 @@
 from flask import Flask
 from db import db
+import datetime
 
 DB_URL = "postgresql+psycopg2://localhost:5432/test"
 
@@ -11,6 +12,9 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["JWT_BLACKLIST_ENABLED"] = True  # enable blacklist feature
+    app.config["JWT_EXPIRATION_DELTA"] = datetime.timedelta(
+        days=10
+    )  # enable blacklist feature
     app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
         "access",
         "refresh",
