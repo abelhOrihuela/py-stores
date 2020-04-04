@@ -18,7 +18,7 @@ from resources.organizations import Organizations, Organization, OrganizationUse
 from resources.sources import Source, Sources
 from resources.states import State, States
 from resources.municipalities import Municipalities, Municipality
-from resources.posts import Posts
+from resources.posts import Posts, Post
 
 load_dotenv()
 app = create_app()
@@ -62,7 +62,9 @@ api.add_resource(Municipalities, "/municipalities")
 api.add_resource(State, "/states/<string:uuid>")
 api.add_resource(States, "/states")
 
+api.add_resource(Post, "/posts/<string:uuid>")
 api.add_resource(Posts, "/posts")
+
 api.add_resource(User, "/users/<string:uuid>")
 api.add_resource(Users, "/users")
 

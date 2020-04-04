@@ -14,7 +14,7 @@ class State(Resource):
         state = StateModel.find_by_uuid(uuid)
 
         if not state:
-            return {"message": "State not found"}, 404
+            return {"message": "State not found."}, 404
 
         return state_schema.dump(state), 200
 
@@ -26,7 +26,7 @@ class State(Resource):
         state_schema.load(state_json)
 
         if not state:
-            return {"message": "State not found"}, 404
+            return {"message": "State not found."}, 404
 
         state.name = state_json["name"]
         state.abbr = state_json["abbr"]
@@ -41,11 +41,11 @@ class State(Resource):
         state = StateModel.find_by_uuid(uuid)
 
         if not state:
-            return {"message": "State not found"}, 404
+            return {"message": "State not found."}, 404
 
         state.delete_from_db()
 
-        return {"message": "State deleted"}, 200
+        return {"message": "State deleted."}, 200
 
 
 class States(Resource):

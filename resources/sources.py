@@ -13,7 +13,7 @@ class Source(Resource):
         source = SourceModel.find_by_uuid(uuid)
 
         if not source:
-            return {"message": "Source not found"}, 404
+            return {"message": "Source not found."}, 404
 
         return source_schema.dump(source)
 
@@ -24,7 +24,7 @@ class Source(Resource):
         source_schema.load(source_json)
 
         if not source:
-            return {"message": "Source not found"}, 404
+            return {"message": "Source not found."}, 404
 
         source.name = source_json["name"]
         source.site = source_json["site"]
@@ -42,7 +42,7 @@ class Source(Resource):
         source = SourceModel.find_by_uuid(uuid)
 
         if not source:
-            return {"message": "Source not found"}, 404
+            return {"message": "Source not found."}, 404
 
         source.delete_from_db()
         return {"message": "Source deleted."}, 200

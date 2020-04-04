@@ -14,7 +14,7 @@ class Municipality(Resource):
     def get(cls, uuid: str):
         municipality = MunicipalityModel.find_by_uuid(uuid)
         if not municipality:
-            return {"message": "Municipality not found"}, 404
+            return {"message": "Municipality not found."}, 404
 
         return municipality_schema.dump(municipality)
 
@@ -26,7 +26,7 @@ class Municipality(Resource):
         municipality = MunicipalityModel.find_by_uuid(uuid)
 
         if not municipality:
-            return {"message": "Municipality not found"}, 404
+            return {"message": "Municipality not found."}, 404
 
         municipality.name = municipality_json["name"]
         municipality.abbr = municipality_json["abbr"]
@@ -40,8 +40,8 @@ class Municipality(Resource):
     def delete(cls, uuid: str):
         municipality = MunicipalityModel.find_by_uuid(uuid)
         if not municipality:
-            return {"message": "Municipality not found"}, 404
-        return {"message": "Municipality deleted"}, 200
+            return {"message": "Municipality not found."}, 404
+        return {"message": "Municipality deleted."}, 200
 
 
 class Municipalities(Resource):

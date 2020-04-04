@@ -37,7 +37,7 @@ class Organization(Resource):
         org = OrganizationModel.find_by_uuid(uuid)
 
         if not org:
-            return {"message": "Organization not found"}, 404
+            return {"message": "Organization not found."}, 404
 
         return organization_schema.dump(org)
 
@@ -48,7 +48,7 @@ class Organization(Resource):
         org = OrganizationModel.find_by_uuid(uuid)
 
         if not org:
-            return {"message": "Organization not found"}, 404
+            return {"message": "Organization not found."}, 404
 
         org.name = org_request.name
         org_request.save_to_db()
@@ -69,10 +69,10 @@ class OrganizationUsers(Resource):
         member = UserModel.find_by_uuid(user)
 
         if not organization:
-            return {"message": "Organization not found"}, 404
+            return {"message": "Organization not found."}, 404
 
         if not member:
-            return {"message": "User not found"}, 404
+            return {"message": "User not found."}, 404
 
         organization.users.append(member)
         organization.save_to_db()

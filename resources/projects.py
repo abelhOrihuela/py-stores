@@ -22,7 +22,7 @@ class Project(Resource):
         project = ProjectModel.find_by_uuid(uuid)
 
         if not project:
-            return {"message": "Project not found"}, 404
+            return {"message": "Project not found."}, 404
 
         project.name = project_request.name
         project.type = project_request.type
@@ -30,7 +30,7 @@ class Project(Resource):
 
         project.save_to_db()
 
-        return {"message": "Project updated"}, 200
+        return {"message": "Project updated."}, 200
 
     @classmethod
     def delete(cls, uuid: str):

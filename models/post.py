@@ -1,66 +1,41 @@
-from bs4 import BeautifulSoup
-import requests
-from models.source import SourceModel
-from sa import create_app
-from es import es
-from datetime import datetime
-
-app = create_app()
-app.app_context().push()
+from db import db
+from libs.generate_uuid import generate_uuid
+from typing import List
+from sqlalchemy.dialects.postgresql.json import JSONB
+from sqlalchemy.dialects.postgresql import ARRAY, array
 
 
-class PostModel:
+class PostModel(db.Model):
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(80), nullable=False, unique=True, default=generate_uuid)
+    title = db.Column(db.String(500), nullable=False)
+    subtitle = db.Column(db.String(500), nullable=False)
+    tags = db.Column(
+        ARRAY(db.Text),
+        nullable=False,
+        default=db.cast(array([], type_=db.Text), ARRAY(db.Text)),
+    )
+    content = db.Column(JSONB)
+    author = db.Column(db.String(500), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
+    )
+
     @classmethod
-    def process_post(cls, data):
-        with app.app_context():
+    def find_all(cls) -> List["PostModel"]:
+        return cls.query.all()
 
-            url = data["url"]
-            source_id = data["source"]
-            coordinates = data["latlong"]
+    @classmethod
+    def find_by_uuid(cls, _uuid: str) -> "PostModel":
+        return cls.query.filter_by(uuid=_uuid).first()
 
-            source = SourceModel.find_by_uuid(source_id)
+    def save_to_db(self) -> None:
+        db.session.add(self)
+        db.session.commit()
 
-            request = requests.get(url)
-            html = BeautifulSoup(request.text, "html.parser")
-
-            content = ""
-            tagsText = ""
-            tagsArray = []
-
-            title = html.select_one(source.title_selector)
-
-            if source.subtitle_selector:
-                subtitle = html.select_one(source.subtitle_selector)
-
-            if source.content_selector:
-                elements_body = html.select(source.content_selector)
-
-                for el in elements_body:
-                    content += el.text + "\n\n"
-
-            if source.tags_selector:
-                elements_tags = html.select(source.tags_selector)
-
-                for el in elements_tags:
-                    tagsArray.append(el.text.replace("\n", ""))
-
-                tagsText = ",".join(tagsArray)
-
-            if source.author_selector:
-                author = html.select(source.author_selector)
-
-            body = {
-                "source_id": source_id,
-                "state_id": source_id,
-                "municipality_id": source_id,
-                "title": title.text.replace("\n", ""),
-                "subtitle": subtitle.text.replace("\n", ""),
-                "location": {"type": "Point", "coordinates": coordinates},
-                "content": content,
-                "tags": tagsText.upper(),
-                "author": author.text.replace("\n", ""),
-                "link": url,
-                "timestamp": datetime.now(),
-            }
-
-            es.index(index="contents", body=body)
+    def delete_from_db(self) -> None:
+        db.session.delete(self)
+        db.session.commit()

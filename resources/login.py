@@ -33,7 +33,7 @@ class UserLogin(Resource):
         # if user and safe_str_cmp(user.password, user_data.password):
 
         if not user:
-            return {"message": "User not found"}, 404
+            return {"message": "User not found."}, 404
 
         if check_password_hash(user.password, json_request["password"]):
             if user.activated:
@@ -65,7 +65,7 @@ class UserMe(Resource):
         user = UserModel.find_by_id(user_id)
 
         if not user:
-            return {"message": "User not found"}, 404
+            return {"message": "User not found."}, 404
 
         return user_schema.dump(user), 200
 

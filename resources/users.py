@@ -59,7 +59,7 @@ class UserConfirm(Resource):
         user = UserModel.find_by_uuid(uuid)
 
         if not user:
-            return {"message": "User not found"}, 404
+            return {"message": "User not found."}, 404
 
         user.activated = True
         user.save_to_db()
