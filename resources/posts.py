@@ -52,7 +52,7 @@ class Post(Resource):
 class Posts(Resource):
     @classmethod
     def get(cls):
-        return {"posts": post_schema_list.load(PostModel.find_all())}, 200
+        return {"posts": post_schema_list.dump(PostModel.find_all())}, 200
 
     @classmethod
     def post(cls):

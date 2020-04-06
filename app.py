@@ -24,7 +24,7 @@ load_dotenv()
 app = create_app()
 app.app_context().push()
 CORS(app)
-api = Api(app, prefix="/api")
+api = Api(app, prefix="/api/v1")
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
 

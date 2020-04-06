@@ -26,7 +26,7 @@ class Organizations(Resource):
 
         organization.save_to_db()
 
-        return {"message": "User created successfully."}, 201
+        return {"message": "Organization created successfully."}, 201
 
 
 class Organization(Resource):
@@ -72,7 +72,7 @@ class OrganizationUsers(Resource):
             return {"message": "Organization not found."}, 404
 
         if not member:
-            return {"message": "User not found."}, 404
+            return {"message": "Organization not found."}, 404
 
         organization.users.append(member)
         organization.save_to_db()
