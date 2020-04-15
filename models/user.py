@@ -17,6 +17,7 @@ class UserModel(db.Model):
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(500), nullable=False)
     activated = db.Column(db.Boolean, default=False)
+    role = db.Column(db.String(50), default="user")
     organizations = db.relationship(
         "OrganizationModel", secondary=users_organizations, back_populates="users"
     )
@@ -36,6 +37,10 @@ class UserModel(db.Model):
     @classmethod
     def find_by_uuid(cls, _uuid: str) -> "UserModel":
         return cls.query.filter_by(uuid=_uuid).first()
+
+    @classmethod
+    def count(cls) -> int:
+        return cls.query.count()
 
     def send_email_confirmation(self) -> Response:
         mailer = Mailer()

@@ -1,11 +1,10 @@
 from ma import ma
 from models.organization import OrganizationModel
-from schemas.user import UserSchema
 
 
 class OrganizationSchema(ma.ModelSchema):
 
-    users = ma.Nested(UserSchema, many=True)
+    users = ma.Nested("UserSchema", exclude=("organizations",), many=True)
 
     class Meta:
         model = OrganizationModel

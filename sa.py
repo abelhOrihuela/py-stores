@@ -13,7 +13,7 @@ def create_app():
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["JWT_BLACKLIST_ENABLED"] = True  # enable blacklist feature
     app.config["JWT_EXPIRATION_DELTA"] = datetime.timedelta(
-        days=10
+        days=1
     )  # enable blacklist feature
     app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
         "access",

@@ -4,7 +4,7 @@ from models.user import UserModel
 
 class UserSchema(ma.ModelSchema):
 
-    # organizations = ma.Nested("OrganizationSchema", many=True)
+    organizations = ma.Nested("OrganizationSchema", exclude=("users",), many=True)
 
     class Meta:
         model = UserModel

@@ -58,7 +58,14 @@ class Organization(Resource):
     # delete by uuid
     @classmethod
     def delete(cls, uuid: str):
-        return "Hola"
+        org = OrganizationModel.find_by_uuid(uuid)
+
+        if not org:
+            return {"message": "Organization not found."}, 404
+
+        org.delete_from_db()
+
+        return {"message": "Organization deleted!."}, 200
 
 
 class OrganizationUsers(Resource):
@@ -72,7 +79,7 @@ class OrganizationUsers(Resource):
             return {"message": "Organization not found."}, 404
 
         if not member:
-            return {"message": "Organization not found."}, 404
+            return {"message": "User not found."}, 404
 
         organization.users.append(member)
         organization.save_to_db()

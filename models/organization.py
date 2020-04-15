@@ -14,6 +14,10 @@ class OrganizationModel(db.Model):
     users = db.relationship(
         "UserModel", secondary=users_organizations, back_populates="organizations"
     )
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
+    )
 
     @classmethod
     def find_by_name(cls, _name: str) -> "OrganizationModel":
@@ -26,6 +30,10 @@ class OrganizationModel(db.Model):
     @classmethod
     def find_by_uuid(cls, _uuid: str) -> "OrganizationModel":
         return cls.query.filter_by(uuid=_uuid).first()
+
+    @classmethod
+    def count(cls) -> int:
+        return cls.query.count()
 
     def save_to_db(self) -> None:
         db.session.add(self)

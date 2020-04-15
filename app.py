@@ -9,16 +9,18 @@ from flask_migrate import Migrate
 from sa import create_app
 from flask_cors import CORS
 from dotenv import load_dotenv
-
+from models.user import UserModel
 
 # Resources
-from resources.users import UserRegister, User, UserConfirm, Users
 from resources.login import UserLogin, UserMe, TokenRefresh, UserLogout
 from resources.organizations import Organizations, Organization, OrganizationUsers
+from resources.users import UserRegister, User, UserConfirm, Users
+
 from resources.sources import Source, Sources
 from resources.states import State, States
 from resources.municipalities import Municipalities, Municipality
 from resources.posts import Posts, Post
+from resources.dashboard import Dashboard
 
 load_dotenv()
 app = create_app()
@@ -29,9 +31,9 @@ jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
 
 
 @app.errorhandler(ValidationError)
@@ -47,8 +49,18 @@ def check_if_token_in_blacklist(decrypted_token):
     )  # Here we blacklist particular JWTs that have been created in the past.
 
 
-# Routes
+@jwt.user_loader_callback_loader
+def user_loader_callback(identity):
 
+    return UserModel.find_by_id(identity)
+
+    # return UserObject(
+    #     username=identity,
+    #     # roles=users_to_roles[identity]
+    # )
+
+
+# Routes
 api.add_resource(Organizations, "/organizations")
 api.add_resource(Organization, "/organizations/<string:uuid>")
 api.add_resource(OrganizationUsers, "/organizations/<string:org>/users/<string:user>")
@@ -67,6 +79,8 @@ api.add_resource(Posts, "/posts")
 
 api.add_resource(User, "/users/<string:uuid>")
 api.add_resource(Users, "/users")
+
+api.add_resource(Dashboard, "/dashboard")
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserConfirm, "/user-confirm/<string:uuid>")

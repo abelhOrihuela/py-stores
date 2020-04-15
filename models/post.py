@@ -32,6 +32,10 @@ class PostModel(db.Model):
     def find_by_uuid(cls, _uuid: str) -> "PostModel":
         return cls.query.filter_by(uuid=_uuid).first()
 
+    @classmethod
+    def count(cls) -> int:
+        return cls.query.count()
+
     def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()
