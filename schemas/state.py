@@ -3,7 +3,7 @@ from models.state import StateModel
 from schemas.municipality import MunicipalitySchema
 
 
-class StateSchema(ma.ModelSchema):
+class StateSchema(ma.SQLAlchemyAutoSchema):
 
     municipalities = ma.Nested(MunicipalitySchema, many=True)
 

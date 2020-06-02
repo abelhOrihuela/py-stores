@@ -1,7 +1,9 @@
 from flask_restful import Resource
 from schemas.post import PostSchema
 from models.post import PostModel
-from flask import request
+from models.organization import OrganizationModel
+from flask import request, session, g
+from flask_jwt_extended import get_current_user, jwt_required
 
 post_schema = PostSchema()
 post_schema_list = PostSchema(many=True)
@@ -9,7 +11,7 @@ post_schema_list = PostSchema(many=True)
 
 class Post(Resource):
     @classmethod
-    def get(cls, uuid: str):
+    def get(cls, org: str, uuid: str):
         post = PostModel.find_by_uuid(uuid)
 
         if not post:
@@ -18,28 +20,37 @@ class Post(Resource):
         return post_schema.dump(post), 200
 
     @classmethod
-    def put(cls, uuid: str):
-        post_request = post_schema.load(request.get_json())
+    @jwt_required
+    def put(cls, org: str, post: str):
 
-        post = PostModel.find_by_uuid(uuid)
+        user = get_current_user()
+        organization = OrganizationModel.find_by_uuid(org)
+
+        request_json = request.get_json()
+        request_json["user_id"] = user.id
+        request_json["organization_id"] = organization.id
+
+        # post_request = post_schema.load(request_json)
+
+        post = PostModel.find_by_uuid(post)
 
         if not post:
             return {"message": "Post not found."}, 404
 
-        post.title = post_request.title
-        post.subtitle = post_request.subtitle
-        post.tags = post_request.tags
-        post.content = post_request.content
-        post.author = post_request.author
+        post.title = request_json["title"]
+        post.subtitle = request_json["subtitle"]
+        post.tags = request_json["tags"]
+        post.content = request_json["content"]
 
         post.save_to_db()
 
         return {"message": "Post updated."}, 200
 
     @classmethod
-    def delete(cls, uuid: str):
+    @jwt_required
+    def delete(cls, org: str, post: str):
 
-        post = PostModel.find_by_uuid(uuid)
+        post = PostModel.find_by_uuid(post)
 
         if not post:
             return {"message": "Post not found."}, 404
@@ -51,13 +62,28 @@ class Post(Resource):
 
 class Posts(Resource):
     @classmethod
-    def get(cls):
-        return {"posts": post_schema_list.dump(PostModel.find_all())}, 200
+    @jwt_required
+    def get(cls, org: str):
+        organization = OrganizationModel.find_by_uuid(org)
+
+        print(organization.uuid)
+        return (
+            {"posts": post_schema_list.dump(PostModel.find_by_org(organization.id))},
+            200,
+        )
 
     @classmethod
-    def post(cls):
-        post_request = post_schema.load(request.get_json())
+    @jwt_required
+    def post(cls, org: str):
 
+        user = get_current_user()
+        organization = OrganizationModel.find_by_uuid(org)
+
+        request_json = request.get_json()
+        request_json["user_id"] = user.id
+        request_json["organization_id"] = organization.id
+
+        post_request = post_schema.load(request_json)
         post_request.save_to_db()
 
         return {"message": "Post created."}

@@ -39,7 +39,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(uuid=_uuid).first()
 
     @classmethod
-    def count(cls) -> int:
+    def count_by_org(cls, org: str) -> int:
         return cls.query.count()
 
     def send_email_confirmation(self) -> Response:

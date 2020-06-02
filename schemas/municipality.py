@@ -2,7 +2,7 @@ from ma import ma
 from models.municipality import MunicipalityModel
 
 
-class MunicipalitySchema(ma.ModelSchema):
+class MunicipalitySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = MunicipalityModel
         include_fk = True

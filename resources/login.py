@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
     create_access_token,
@@ -76,3 +76,12 @@ class TokenRefresh(Resource):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)
         return {"access_token": new_token}, 200
+
+
+class SetSession(Resource):
+    @classmethod
+    @jwt_required
+    def post(cls):
+        session["foo"] = "bar"
+        g.username = "root"
+        print("before_request is running!")

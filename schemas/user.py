@@ -2,11 +2,13 @@ from ma import ma
 from models.user import UserModel
 
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(ma.SQLAlchemyAutoSchema):
 
     organizations = ma.Nested("OrganizationSchema", exclude=("users",), many=True)
 
     class Meta:
         model = UserModel
         load_only = ("password",)
+        load_instance = True
+
         # dump_only = ("id", "uuid", "activated", "organizations")

@@ -23,6 +23,9 @@ users_schema_list = UserSchema(many=True)
 class UserRegister(Resource):
     @classmethod
     def post(cls):
+
+        data = request.get_json()
+
         user = user_schema.load(request.get_json())
 
         if UserModel.find_by_email(user.email):
@@ -31,9 +34,9 @@ class UserRegister(Resource):
         user.password = generate_password_hash(user.password)
 
         user.save_to_db()
-        message = user.send_email_confirmation()
+        user.send_email_confirmation()
 
-        return message, 201
+        return {"message": "User created."}, 200
 
 
 class User(Resource):

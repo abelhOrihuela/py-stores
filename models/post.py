@@ -18,7 +18,16 @@ class PostModel(db.Model):
         default=db.cast(array([], type_=db.Text), ARRAY(db.Text)),
     )
     content = db.Column(JSONB)
-    author = db.Column(db.String(500), nullable=False)
+    # author = db.Column(db.String(500), nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user = db.relationship("UserModel")
+
+    organization_id = db.Column(
+        db.Integer, db.ForeignKey("organizations.id"), nullable=False
+    )
+    organization = db.relationship("OrganizationModel")
+
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
         db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
@@ -33,8 +42,12 @@ class PostModel(db.Model):
         return cls.query.filter_by(uuid=_uuid).first()
 
     @classmethod
-    def count(cls) -> int:
-        return cls.query.count()
+    def find_by_org(cls, _org: str) -> List["PostModel"]:
+        return cls.query.filter_by(organization_id=_org).all()
+
+    @classmethod
+    def count_by_org(cls, _org: str) -> int:
+        return cls.query.filter_by(organization_id=_org).count()
 
     def save_to_db(self) -> None:
         db.session.add(self)
